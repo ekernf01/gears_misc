@@ -19,9 +19,11 @@ Please raise an issue or email yroohani@stanford.edu in case of any problems/que
 
 ### Our repro attempts
 
-Some of this is also documented in the GEARS github page, issue #5. Followed the instructions above
+Some of this is also documented in the GEARS github page, issue #5. 
 
-#### Intended first step is fig2_train.py
+I followed the instructions above, but then ran into problems, which are being sequentially resolved. 
+
+#### Intended next step is fig2_train.py
 
 I tried running the fig2b adamson and dixit notebooks, but they fail with errors like "ValueError: Could not find project pert_gnn_simulation_adamson2016". I noticed the comment saying "Project is specified by <entity/project-name> please replace it with your project name here". I replaced with my own project name, but then there was no logged data. I concluded that the intended first step is to train the models via fig2_train.py, not to run the notebooks. All good so far -- I wanted to train the models up myself anyway, not just load evaluation results.
 
