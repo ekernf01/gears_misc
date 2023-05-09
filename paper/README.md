@@ -21,7 +21,8 @@ Please raise an issue or email yroohani@stanford.edu in case of any problems/que
 
 Some of this is also documented in the GEARS github page, issue #5. Followed the instructions above
 
-Intended first step is fig2_train.py
+#### Intended first step is fig2_train.py
+
 I tried running the fig2b adamson and dixit notebooks, but they fail with errors like "ValueError: Could not find project pert_gnn_simulation_adamson2016". I noticed the comment saying "Project is specified by <entity/project-name> please replace it with your project name here". I replaced with my own project name, but then there was no logged data. I concluded that the intended first step is to train the models via fig2_train.py, not to run the notebooks. All good so far -- I wanted to train the models up myself anyway, not just load evaluation results.
 
 #### Environment
@@ -32,6 +33,7 @@ I tried running `python3 fig2_train.py` but I needed to install the right set of
 - Note: this does not install GEARS itself. I assume fig2_train.py is meant to pull in the copy of gears in this repo via `sys.path.append("../")`.
 
 #### Weaselling out of the GPU requirement
+
 I then ran `python3 fig2_train.py` and `python3 fig2_train.py --device cpu`, but it seems GPU is currently a hard requirement. Wanting a GPU is reasonable but I checked to see how far I could weasel out of it. I modified lines 8 and 47 of fig2_train.py to allow users to pass in 'cpu' as the device, and I modified six lines in utils.py to avoid += as per #9. I also removed many instances of `.to(device)` in `gears/gears.py`, `gears/inference.py`, and `gears/dataloader.py`. This seemed to work -- I hit an issue, but not seemingly GPU-related.
 
 #### Getting the GO graph
@@ -45,9 +47,12 @@ I changed these to `data/go_essential_norman.csv` since I have that file from fo
 
 #### Running on adamson and dixit
 
-The default option trains on the Norman data, whereas I am primarily interested in figure 2b showing results on the Adamson and Dixit perturb-seqs. I modified `fig2_train.py` to accept 'adamson' or 'dixit' as input, and this likely broke the ability to run on other datasets but I'm ok with that. I run it like this.
+The default option trains on the Norman data, whereas I am primarily interested in figure 2b showing results on the Adamson and Dixit perturb-seqs. I modified `fig2_train.py` to accept 'adamson' or 'dixit' as input. This likely broke the ability to run on other datasets but I'm ok with that. I run it like this.
 
-    python fig2_train.py --dataset=adamson > adamson.out 2> adamson.err &
-    python fig2_train.py --dataset=dixit > dixit.out 2> dixit.err &
+    cd paper
+    conda activate gears_reproduction
+    mkdir logs
+    python fig2_train.py --dataset=adamson > logs/adamson.out 2>  logs/adamson.err &
+    python fig2_train.py --dataset=dixit >  logs/dixit.out 2>  logs/dixit.err &
 
-My internet went out at the office so I struggled with wandb, but I will update here after I get a fair test.
+I was able to train successfully on Adamson and Dixit, but got stuck reading the results into the Fig2b notebooks.
