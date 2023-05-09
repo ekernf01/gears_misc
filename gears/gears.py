@@ -66,7 +66,7 @@ class GEARS:
         self.saved_pred = {}
         self.saved_logvar_sum = {}
         
-        self.ctrl_expression = torch.tensor(np.mean(self.adata.X[self.adata.obs.condition == 'ctrl'], axis = 0)).reshape(-1,).to(self.device)
+        self.ctrl_expression = torch.tensor(np.mean(self.adata.X[self.adata.obs.condition == 'ctrl'], axis = 0)).reshape(-1,)
         pert_full_id2pert = dict(self.adata.obs[['condition_name', 'condition']].values)
         if gi_predict:
             self.dict_filter = None
@@ -149,7 +149,7 @@ class GEARS:
             self.config['G_go'] = sim_network.edge_index
             self.config['G_go_weight'] = sim_network.edge_weight
             
-        self.model = GEARS_Model(self.config).to(self.device)
+        self.model = GEARS_Model(self.config)
         self.best_model = deepcopy(self.model)
         
     def load_pretrained(self, path):
@@ -171,7 +171,7 @@ class GEARS:
             state_dict = new_state_dict
         
         self.model.load_state_dict(state_dict)
-        self.model = self.model.to(self.device)
+        self.model = self.model
         self.best_model = self.model
     
     def save_model(self, path):
@@ -199,7 +199,7 @@ class GEARS:
         if self.config['uncertainty']:
             results_logvar = {}
             
-        self.best_model = self.best_model.to(self.device)
+        self.best_model = self.best_model
         self.best_model.eval()
         results_pred = {}
         results_logvar_sum = {}
@@ -218,7 +218,7 @@ class GEARS:
             cg = create_cell_graph_dataset_for_prediction(pert, self.ctrl_adata, self.pert_list, self.device)
             loader = DataLoader(cg, 300, shuffle = False)
             batch = next(iter(loader))
-            batch.to(self.device)
+            batch
 
             with torch.no_grad():
                 if self.config['uncertainty']:
@@ -318,7 +318,7 @@ class GEARS:
         train_loader = self.dataloader['train_loader']
         val_loader = self.dataloader['val_loader']
             
-        self.model = self.model.to(self.device)
+        self.model = self.model
         best_model = deepcopy(self.model)
         optimizer = optim.Adam(self.model.parameters(), lr=lr, weight_decay = weight_decay)
         scheduler = StepLR(optimizer, step_size=1, gamma=0.5)
@@ -330,7 +330,7 @@ class GEARS:
             self.model.train()
 
             for step, batch in enumerate(train_loader):
-                batch.to(self.device)
+                batch
                 optimizer.zero_grad()
                 y = batch.y
                 if self.config['uncertainty']:

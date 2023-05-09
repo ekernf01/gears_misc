@@ -60,8 +60,8 @@ class GEARS_Model(torch.nn.Module):
         self.pert_fuse = MLP([hidden_size, hidden_size, hidden_size], last_layer_act='ReLU')
         
         # gene co-expression GNN
-        self.G_coexpress = args['G_coexpress'].to(args['device'])
-        self.G_coexpress_weight = args['G_coexpress_weight'].to(args['device'])
+        self.G_coexpress = args['G_coexpress']
+        self.G_coexpress_weight = args['G_coexpress_weight']
 
         self.emb_pos = nn.Embedding(self.num_genes, hidden_size, max_norm=True)
         self.layers_emb_pos = torch.nn.ModuleList()
@@ -69,8 +69,8 @@ class GEARS_Model(torch.nn.Module):
             self.layers_emb_pos.append(SGConv(hidden_size, hidden_size, 1))
         
         ### perturbation gene ontology GNN
-        self.G_sim = args['G_go'].to(args['device'])
-        self.G_sim_weight = args['G_go_weight'].to(args['device'])
+        self.G_sim = args['G_go']
+        self.G_sim_weight = args['G_go_weight']
 
         self.sim_layers = torch.nn.ModuleList()
         for i in range(1, self.num_layers + 1):
@@ -119,11 +119,11 @@ class GEARS_Model(torch.nn.Module):
             num_graphs = len(data.batch.unique())
 
             ## get base gene embeddings
-            emb = self.gene_emb(torch.LongTensor(list(range(self.num_genes))).repeat(num_graphs, ).to(self.args['device']))        
+            emb = self.gene_emb(torch.LongTensor(list(range(self.num_genes))).repeat(num_graphs, ))        
             emb = self.bn_emb(emb)
             base_emb = self.emb_trans(emb)        
 
-            pos_emb = self.emb_pos(torch.LongTensor(list(range(self.num_genes))).repeat(num_graphs, ).to(self.args['device']))
+            pos_emb = self.emb_pos(torch.LongTensor(list(range(self.num_genes))).repeat(num_graphs, ))
             for idx, layer in enumerate(self.layers_emb_pos):
                 pos_emb = layer(pos_emb, self.G_coexpress, self.G_coexpress_weight)
                 if idx < len(self.layers_emb_pos) - 1:
@@ -144,7 +144,7 @@ class GEARS_Model(torch.nn.Module):
                         pert_index.append([idx, j])
             pert_index = torch.tensor(pert_index).T
 
-            pert_global_emb = self.pert_emb(torch.LongTensor(list(range(self.num_perts))).to(self.args['device']))        
+            pert_global_emb = self.pert_emb(torch.LongTensor(list(range(self.num_perts))))        
 
             ## augment global perturbation embedding with GNN
             for idx, layer in enumerate(self.sim_layers):

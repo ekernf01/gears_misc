@@ -164,10 +164,11 @@ def get_similarity_network(network_type, adata, threshold, k, gene_list, data_pa
     elif network_type == 'go':
         #df_jaccard = get_go_auto(gene_list, data_path, data_name)
         if gi_go:
-            df_jaccard = pd.read_csv('/dfs/user/kexinh/gears2/go_essential_gi.csv')
+            #df_jaccard = pd.read_csv('/dfs/user/kexinh/gears2/go_essential_gi.csv')
+            df_jaccard = pd.read_csv('data/go_essential_norman.csv')
         else:
-            df_jaccard = pd.read_csv('/dfs/user/kexinh/gears2/go_essential_all.csv')
-            
+            #df_jaccard = pd.read_csv('/dfs/user/kexinh/gears2/go_essential_all.csv')
+            df_jaccard = pd.read_csv('data/go_essential_norman.csv')
         if dataset is not None:
             df_jaccard = pd.read_csv(dataset)
             
@@ -272,7 +273,7 @@ def loss_fct(pred, y, perts, ctrl = None, direction_lambda = 1e-3, dict_filter =
         if (p!= 'ctrl'):
             losses = losses + torch.sum(direction_lambda * (torch.sign(y_p - ctrl[retain_idx]) - torch.sign(pred_p - ctrl[retain_idx]))**2)/pred_p.shape[0]/pred_p.shape[1]
         else:
-            losses = losses + torch.sum(direction_lambda * (torch.sign(y_p - ctrl) - torch.sign(pred_p - ctrl))**2)/pred_p.shape[0]/pred_p.shape[1]
+            losses = losses +  torch.sum(direction_lambda * (torch.sign(y_p - ctrl) - torch.sign(pred_p - ctrl))**2)/pred_p.shape[0]/pred_p.shape[1]
     return losses/(len(set(perts)))
 
 

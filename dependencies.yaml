@@ -1,0 +1,23 @@
+name: gears_reproduction
+channels:
+  - pytorch
+  - pyg
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.9
+  - scipy
+  - pytorch
+  - pyg
+  - torchvision 
+  - torchaudio 
+  - numpy[version='<=1.23']
+  - jupyterlab
+  - jupyter
+  - ipywidgets
+  - wandb
+  - scanpy
+  - python-igraph
+  - louvain
+  - dcor

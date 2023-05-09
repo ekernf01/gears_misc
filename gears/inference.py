@@ -13,7 +13,7 @@ def evaluate(loader, model, uncertainty, device):
     """
 
     model.eval()
-    model.to(device)
+    # model.to(device)
     pert_cat = []
     pred = []
     truth = []
@@ -24,7 +24,7 @@ def evaluate(loader, model, uncertainty, device):
     
     for itr, batch in enumerate(loader):
 
-        batch.to(device)
+        # batch.to(device)
         pert_cat.extend(batch.pert)
 
         with torch.no_grad():
@@ -664,7 +664,7 @@ def batch_predict(loader, loaded_models, args):
     print("Loader size: ", len(loader))
     for itr, batch in enumerate(loader):
         print(itr)
-        batch = batch.to(args['device'])
+        # batch = batch.to(args['device'])
         preds.append(node_specific_batch_out(loaded_models, batch))
 
     preds = np.vstack(preds)
