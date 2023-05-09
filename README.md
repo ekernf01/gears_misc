@@ -1,3 +1,7 @@
+This is a copy of the [paper repro repo](https://github.com/snap-stanford/gears_misc) from GEARS. We primarily tried to reproduce figure 2b. See `paper/README` for more detail on our attempts. Below is the original README.
+
+----
+
 # GEARS (Miscellaneous) 
 
 ### Miscellaneous code and analysis scripts related to [GEARS: Predicting transcriptional outcomes of novel multi-gene perturbations](https://github.com/snap-stanford/GEARS)
